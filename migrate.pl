@@ -25,7 +25,7 @@ GetOptions(\%switch, 'help|h|?', 'from=s', 'verbose|v+', 'dry-run');
 # Print the help message if that switch was selected or if --from
 # wasn't specified.
 if (!$switch{'from'} or $switch{'help'}) {
-    pod2usage({-exitval => 1});
+  pod2usage({-exitval => 1});
 }
 
 my $migrator = Bugzilla::Migrate->load($switch{'from'});
@@ -37,13 +37,13 @@ $migrator->do_migration();
 # Even if there's an error, we want to be sure that the serial values
 # get reset properly.
 END {
-    if ($migrator and $migrator->dry_run) {
-        my $dbh = Bugzilla->dbh;
-        if ($dbh->bz_in_transaction) {
-            $dbh->bz_rollback_transaction();
-        }
-        $migrator->reset_serial_values();
+  if ($migrator and $migrator->dry_run) {
+    my $dbh = Bugzilla->dbh;
+    if ($dbh->bz_in_transaction) {
+      $dbh->bz_rollback_transaction();
     }
+    $migrator->reset_serial_values();
+  }
 }
 
 __END__
@@ -95,5 +95,5 @@ the size of all attachments in your current bug-tracker.
 
 You may also need to increase the number of file handles a process is allowed
 to hold open (as the migrator will create a file handle for each attachment
-in your database). On Linux and simliar systems, you can do this as root
+in your database). On Linux and similar systems, you can do this as root
 by typing C<ulimit -n 65535> before running your script.
